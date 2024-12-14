@@ -13,11 +13,11 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author USER
  */
-public class formDanhSachCauHoi extends javax.swing.JFrame {
+public class formDanhSachDeThi extends javax.swing.JFrame {
     /**
      * Creates new form formDanhSachCauHoi
      */
-    public formDanhSachCauHoi() {
+    public formDanhSachDeThi() {
         initComponents();
         loadDSBaiThi();
         loadDSCauHoi();
@@ -117,6 +117,11 @@ public class formDanhSachCauHoi extends javax.swing.JFrame {
                 "Mã đề thi", "Môn thi"
             }
         ));
+        tableDSBaiThi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableDSBaiThiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableDSBaiThi);
 
         tableDSCauHoi.setModel(new javax.swing.table.DefaultTableModel(
@@ -156,9 +161,9 @@ public class formDanhSachCauHoi extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,6 +174,45 @@ public class formDanhSachCauHoi extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void loadCauHoiByMaDeThi(int maDeThi) {
+        DefaultTableModel model = (DefaultTableModel) tableDSCauHoi.getModel();
+        model.setRowCount(0);
+        
+        String query = "SELECT * FROM CauHoi WHERE MaDeThi = " + maDeThi;
+        Connection connection = new DBConnection().getConnection();
+        
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            while(rs.next()) {
+                model.addRow(new Object[] {
+                    rs.getInt("CauHoiSo"),
+                    rs.getString("NoiDung"),
+                    rs.getString("A"),
+                    rs.getString("B"),
+                    rs.getString("C"),
+                    rs.getString("D"),
+                    rs.getString("DapAn")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void tableDSBaiThiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDSBaiThiMouseClicked
+        // TODO add your handling code here:
+        
+        int selectedRow = tableDSBaiThi.getSelectedRow();
+        
+        if(selectedRow != -1) {
+            int maDeThi = (int) tableDSBaiThi.getValueAt(selectedRow, 0);
+            
+            loadCauHoiByMaDeThi(maDeThi);
+        }
+    }//GEN-LAST:event_tableDSBaiThiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -187,20 +231,21 @@ public class formDanhSachCauHoi extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formDanhSachCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formDanhSachDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formDanhSachCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formDanhSachDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formDanhSachCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formDanhSachDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formDanhSachCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formDanhSachDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formDanhSachCauHoi().setVisible(true);
+                new formDanhSachDeThi().setVisible(true);
             }
         });
     }
@@ -215,4 +260,6 @@ public class formDanhSachCauHoi extends javax.swing.JFrame {
     private javax.swing.JTable tableDSBaiThi;
     private javax.swing.JTable tableDSCauHoi;
     // End of variables declaration//GEN-END:variables
+
+    
 }

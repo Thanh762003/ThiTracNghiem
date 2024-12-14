@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 public class formTaoDeThi extends javax.swing.JFrame {
     private DeThi deThi = null;
     private ArrayList<CauHoi> cauHoiList = new ArrayList<>();
+    private int cauHoiSo = 0;
     /**
      * Creates new form formTaoDeThi
      */
@@ -365,7 +366,10 @@ public class formTaoDeThi extends javax.swing.JFrame {
     
     private void btnCauTiepTheoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCauTiepTheoActionPerformed
         // TODO add your handling code here:
-        themCauHoi();
+        if(themCauHoi()) {
+            cauHoiSo++;
+            lblCauHoiSo.setText(String.valueOf(cauHoiSo + 1));
+        }
     }//GEN-LAST:event_btnCauTiepTheoActionPerformed
         
     private void btnSetDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDeThiActionPerformed
@@ -384,7 +388,6 @@ public class formTaoDeThi extends javax.swing.JFrame {
     private boolean themCauHoi() {
         boolean valid = validateFields();
         CauHoi cauHoi = new CauHoi();
-        int cauHoiSo = 1;
         
         if(valid) {
             cauHoi.setA(txtA.getText().trim());
@@ -419,13 +422,10 @@ public class formTaoDeThi extends javax.swing.JFrame {
             
             cauHoi.setDeThi(deThi);
             
-            cauHoiSo++;
-            lblCauHoiSo.setText(String.valueOf(cauHoiSo));
+            return true;
         } else {
-            lblCauHoiSo.setText("1");
+            return false;
         }
-        
-        return valid;
     }
     
     private void btnLuuDSCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuDSCauHoiActionPerformed

@@ -105,7 +105,7 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
     private void btnDanhSachDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhSachDeThiActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new formDanhSachCauHoi().setVisible(true);
+        new formDanhSachDeThi().setVisible(true);
     }//GEN-LAST:event_btnDanhSachDeThiActionPerformed
 
     /**
