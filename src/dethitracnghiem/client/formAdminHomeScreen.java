@@ -29,6 +29,8 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
         btnTaoBoCauHoi = new javax.swing.JButton();
         btnDanhSachDeThi = new javax.swing.JButton();
         btnCapNhatCauHoi = new javax.swing.JButton();
+        btnXoaCauHoi = new javax.swing.JButton();
+        btnThongTinThiSinh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,17 +64,42 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
             }
         });
 
+        btnXoaCauHoi.setBackground(new java.awt.Color(153, 0, 0));
+        btnXoaCauHoi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnXoaCauHoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoaCauHoi.setText("Xóa câu hỏi");
+        btnXoaCauHoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaCauHoiActionPerformed(evt);
+            }
+        });
+
+        btnThongTinThiSinh.setBackground(new java.awt.Color(0, 102, 102));
+        btnThongTinThiSinh.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnThongTinThiSinh.setForeground(new java.awt.Color(255, 255, 255));
+        btnThongTinThiSinh.setText("Thông tin cá nhân");
+        btnThongTinThiSinh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThongTinThiSinhActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnTaoBoCauHoi)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCapNhatCauHoi)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
-                .addComponent(btnDanhSachDeThi)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnThongTinThiSinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnTaoBoCauHoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCapNhatCauHoi, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDanhSachDeThi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnXoaCauHoi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -80,10 +107,15 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTaoBoCauHoi)
-                    .addComponent(btnDanhSachDeThi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCapNhatCauHoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(251, 251, 251))
+                    .addComponent(btnTaoBoCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXoaCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCapNhatCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDanhSachDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnThongTinThiSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,6 +139,18 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
         this.dispose();
         new formDanhSachDeThi().setVisible(true);
     }//GEN-LAST:event_btnDanhSachDeThiActionPerformed
+
+    private void btnXoaCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaCauHoiActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new formXoaCauHoi().setVisible(true);
+    }//GEN-LAST:event_btnXoaCauHoiActionPerformed
+
+    private void btnThongTinThiSinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongTinThiSinhActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new formAdminStudent().setVisible(true);
+    }//GEN-LAST:event_btnThongTinThiSinhActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,5 +191,7 @@ public class formAdminHomeScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnCapNhatCauHoi;
     private javax.swing.JButton btnDanhSachDeThi;
     private javax.swing.JButton btnTaoBoCauHoi;
+    private javax.swing.JButton btnThongTinThiSinh;
+    private javax.swing.JButton btnXoaCauHoi;
     // End of variables declaration//GEN-END:variables
 }

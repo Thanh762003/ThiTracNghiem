@@ -5,8 +5,6 @@
 package dethitracnghiem.server;
 
 import java.sql.*;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +22,17 @@ public class CauHoi {
 
     public CauHoi() {
     }
+
+    public CauHoi(DeThi deThi, Integer cauHoiSo, String noiDung, String A, String B, String C, String D, String dapAn) {
+        this.deThi = deThi;
+        this.cauHoiSo = cauHoiSo;
+        this.noiDung = noiDung;
+        this.A = A;
+        this.B = B;
+        this.C = C;
+        this.D = D;
+        this.dapAn = dapAn;
+    }
     
     public CauHoi(DeThi deThi, String noiDung, String A, String B, String C, String D, String dapAn) {
         this.deThi = deThi;
@@ -38,9 +47,18 @@ public class CauHoi {
     public DeThi getDeThi() {
         return deThi;
     }
+    
 
     public void setDeThi(DeThi deThi) {
         this.deThi = deThi;
+    }
+
+    public Integer getCauHoiSo() {
+        return cauHoiSo;
+    }
+
+    public void setCauHoiSo(Integer cauHoiSo) {
+        this.cauHoiSo = cauHoiSo;
     }
 
     public String getNoiDung() {

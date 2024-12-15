@@ -10,6 +10,7 @@ import dethitracnghiem.server.DeThi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -296,6 +297,7 @@ public class formXoaCauHoi extends javax.swing.JFrame {
                 DeThi deThi = new DeThi();
                 cauHoi = new CauHoi(
                         deThi, 
+                        rs.getInt("CauHoiSo"),
                         rs.getString("NoiDung"), 
                         rs.getString("A"), 
                         rs.getString("B"), 
@@ -357,12 +359,45 @@ public class formXoaCauHoi extends javax.swing.JFrame {
 
     private void btnXoaCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaCauHoiActionPerformed
         // TODO add your handling code here:
-        if(cauHoi == null) {
+        if(cauHoi == null || cauHoi.getCauHoiSo() == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng tìm kiếm câu hỏi trước khi xóa", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
+        int xacNhan = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa câu hỏi này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         
+        if(xacNhan != JOptionPane.YES_NO_OPTION) {
+            return;
+        } 
+        
+        String deleteCauHoi = "DELETE FROM CauHoi WHERE CauHoiSo = ?";
+        Connection con = new DBConnection().getConnection();
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(deleteCauHoi);
+            ps.setInt(1, cauHoi.getCauHoiSo());
+            
+            int rowsAffected = ps.executeUpdate();
+            
+            if(rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Xóa câu hỏi đã thành công");
+                this.dispose();
+                new formAdminHomeScreen().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi khi xóa.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_btnXoaCauHoiActionPerformed
 
     /**
