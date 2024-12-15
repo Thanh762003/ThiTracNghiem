@@ -5,6 +5,7 @@
 package dethitracnghiem.server;
 
 import java.sql.*;
+import java.util.ArrayList;
 /**
  *
  * @author USER
@@ -18,7 +19,10 @@ public class Student {
     private String matKhau;
     private Date ngaySinh;
 
-    public Student(String hoTen, String soDienThoai, Character gioiTinh, String email, String matKhau, Date ngaySinh) {
+    public Student() {
+    }
+
+    public Student(String hoTen, String soDienThoai, char gioiTinh, String email, String matKhau, Date ngaySinh) {
         this.hoTen = hoTen;
         this.soDienThoai = soDienThoai;
         this.gioiTinh = gioiTinh;
@@ -93,12 +97,12 @@ public class Student {
         this.ngaySinh = ngaySinh;
     }
     
-    public boolean save() {
+    public Student save() {
         String insertThiSinh = "INSERT INTO ThiSinh(HoTen, SoDienThoai, Email, Password, GioiTinh, NgaySinh) VALUES (?, ?, ?, ?, ?, ?)";
         
         try {
             try(Connection connection = new DBConnection().getConnection()) {
-               PreparedStatement ps = connection.prepareStatement(insertThiSinh);
+               PreparedStatement ps = connection.prepareStatement(insertThiSinh, Statement.RETURN_GENERATED_KEYS);
                
                ps.setString(1, this.hoTen);
                ps.setString(2, this.soDienThoai);
@@ -109,8 +113,68 @@ public class Student {
                
                int i = ps.executeUpdate();
                
+               ResultSet keys = ps.getGeneratedKeys();
+               
+               if(keys.next()) {
+                   this.maThiSinh = keys.getInt(1);
+               }
+               
                System.out.println("Updated rows: " + i);
-               return true;
+               return this;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ArrayList<Student> getDSThiSinh() {
+        ArrayList<Student> students = new ArrayList<>();
+        
+        String listStudents = "SELECT * FROM ThiSinh";
+        
+        try {
+            try(Connection connection = new DBConnection().getConnection()) {
+               PreparedStatement ps = connection.prepareStatement(listStudents);
+               ResultSet result = ps.executeQuery();
+               
+               while(result.next()) {
+                   Student s = new Student();
+                   
+                   s.setMaThiSinh(result.getInt(1));
+                   s.setHoTen(result.getString(2));
+                   s.setSoDienThoai(result.getString(3));
+                   s.setEmail(result.getString(4));
+                   s.setMatKhau(result.getString(5));
+                   s.setGioiTinh(result.getString(6).charAt(0));
+                   s.setNgaySinh(result.getDate("NgaySinh"));
+                   
+                   students.add(s);
+               }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return students;
+    }
+    
+    public boolean isExists() {
+        String sqlExists = "SELECT COUNT(*) FROM ThiSinh WHERE Email = ?";
+        
+        try {
+            try(Connection connection = new DBConnection().getConnection()) {
+               PreparedStatement ps = connection.prepareStatement(sqlExists);
+               
+               ps.setString(1, this.email);
+               
+               ResultSet result = ps.executeQuery();
+               
+               if(result.next()) {
+                   int count = result.getInt(1);
+                   return count > 0;
+               }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,9 +5,11 @@
 package dethitracnghiem.client;
 
 import dethitracnghiem.server.Student;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -56,7 +58,7 @@ public class formAdminStudent extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDSThiSinh = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        btnTroVe1 = new javax.swing.JButton();
+        btnDanhSachThiSinh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,7 +138,7 @@ public class formAdminStudent extends javax.swing.JFrame {
         btnSaveStudent.setBackground(new java.awt.Color(51, 153, 0));
         btnSaveStudent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSaveStudent.setForeground(new java.awt.Color(255, 255, 255));
-        btnSaveStudent.setText("Thêm thí sinh");
+        btnSaveStudent.setText("Đăng ký");
         btnSaveStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveStudentActionPerformed(evt);
@@ -240,10 +242,11 @@ public class formAdminStudent extends javax.swing.JFrame {
                     .addComponent(dateChooserDOB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(87, 87, 87)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTroVe, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnTroVe, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelContainerLayout = new javax.swing.GroupLayout(panelContainer);
@@ -269,7 +272,7 @@ public class formAdminStudent extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã thí sinh", "Họ và tên", "Số điện thoại", "Email", "Giới tính", "Ngày sinh"
+                "Mã thí sinh", "Họ và tên", "Số điện thoại", "Email", "Mật khẩu", "Giới tính", "Ngày sinh"
             }
         ));
         jScrollPane1.setViewportView(tableDSThiSinh);
@@ -295,13 +298,13 @@ public class formAdminStudent extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
         );
 
-        btnTroVe1.setBackground(new java.awt.Color(51, 153, 255));
-        btnTroVe1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnTroVe1.setForeground(new java.awt.Color(255, 255, 255));
-        btnTroVe1.setText("Danh sách thí sinh");
-        btnTroVe1.addActionListener(new java.awt.event.ActionListener() {
+        btnDanhSachThiSinh.setBackground(new java.awt.Color(51, 153, 255));
+        btnDanhSachThiSinh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDanhSachThiSinh.setForeground(new java.awt.Color(255, 255, 255));
+        btnDanhSachThiSinh.setText("Danh sách thí sinh");
+        btnDanhSachThiSinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTroVe1ActionPerformed(evt);
+                btnDanhSachThiSinhActionPerformed(evt);
             }
         });
 
@@ -317,7 +320,7 @@ public class formAdminStudent extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(461, 461, 461)
-                        .addComponent(btnTroVe1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDanhSachThiSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 444, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -326,7 +329,7 @@ public class formAdminStudent extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnTroVe1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDanhSachThiSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -341,6 +344,60 @@ public class formAdminStudent extends javax.swing.JFrame {
         this.txtEmail.setText("");
         this.gruopGioiTinh.clearSelection();
         this.dateChooserDOB.setDate(null);
+    }
+    
+    private void renderTable() {
+        ArrayList<Student> students = Student.getDSThiSinh();
+        DefaultTableModel model = (DefaultTableModel) tableDSThiSinh.getModel();
+        model.setRowCount(0);
+        
+        for(Student s : students) {
+            model.addRow(new Object[]{
+                s.getMaThiSinh(),
+                s.getHoTen(),
+                s.getSoDienThoai(),
+                s.getEmail(),
+                s.getMatKhau(),
+                s.getGioiTinh(),
+                s.getNgaySinh()
+            });
+        }
+    }
+    
+    private String validate(Student student) {
+        StringBuilder message = new StringBuilder();
+        
+        if(student.getHoTen() == null || student.getHoTen().trim().isEmpty()) {
+            message.append("Vui lòng nhập họ tên,\n");
+        }
+        
+        if(student.getSoDienThoai() == null || student.getSoDienThoai().trim().isEmpty()) {
+            message.append("Vui lòng nhập số điện thoại,\n");
+        } else if(student.getSoDienThoai().length() != 10) {
+            message.append("Số diện thoại phải đúng 10 chữ số.\n");
+        }
+        
+        if(student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+            message.append("Vui lòng nhập email.\n");
+        } else {
+            Pattern emailPattern = Pattern.compile("^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$");
+            
+            if(!emailPattern.matcher(student.getEmail()).matches()) {
+                message.append("Email không hợp lệ! Vui lòng nhập đúng định dạng email.\n");
+            }
+        }
+        
+        if(student.getMatKhau() == null || student.getMatKhau().trim().isEmpty()) {
+            message.append("Vui lòng nhập mật khẩu.\n");
+        } else if(student.getMatKhau().length() < 6) {
+            message.append("Mật khẩu phải có ít nhất 6 ký tự.\n");
+        }
+        
+        if(student.getNgaySinh() == null) {
+            message.append("Vui lòng nhập ngày sinh.\n");
+        }
+        
+        return message.length() > 0 ? message.toString() : null;
     }
     
     private void btnSaveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStudentActionPerformed
@@ -366,38 +423,28 @@ public class formAdminStudent extends javax.swing.JFrame {
         } else if(rbtnNu.isSelected()) {
             gioiTinh = 'F';
         }
-        
-        Pattern p = Pattern.compile("^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$");
-        
-        if(hoTen.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập họ tên", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if(soDienThoai.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if(soDienThoai.length() < 10) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại đúng 10 chữ số", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if(!p.matcher(email).matches()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng email", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if(password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if(password.length() < 6) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu ít nhất 6 ký tự", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        } 
-        
+               
         java.sql.Date date = new java.sql.Date(ngaySinh.getTime());
         
         Student student = new Student(hoTen, soDienThoai, gioiTinh, email, password, date);
         
-        boolean result = student.save();
+        String validateMessage = validate(student);
         
-        if(result) {
+        if(validateMessage != null) {
+            JOptionPane.showMessageDialog(this, validateMessage, "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(student.isExists()) {
+            JOptionPane.showMessageDialog(this, "Thí sinh đã đăng ký tồn tại trong danh sách", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        student = student.save();
+        
+        if(student != null) {
             JOptionPane.showMessageDialog(this, "Thí sinh đã đăng ký Thành công");
-            resetThiSinh();
+            this.resetThiSinh();
         } else {
             JOptionPane.showMessageDialog(this, "Thí sinh đã đăng ký Thất bại", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }
@@ -409,9 +456,10 @@ public class formAdminStudent extends javax.swing.JFrame {
         new formAdminHomeScreen().setVisible(true);
     }//GEN-LAST:event_btnTroVeActionPerformed
 
-    private void btnTroVe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTroVe1ActionPerformed
+    private void btnDanhSachThiSinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhSachThiSinhActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTroVe1ActionPerformed
+        renderTable();
+    }//GEN-LAST:event_btnDanhSachThiSinhActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,9 +497,9 @@ public class formAdminStudent extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDanhSachThiSinh;
     private javax.swing.JButton btnSaveStudent;
     private javax.swing.JButton btnTroVe;
-    private javax.swing.JButton btnTroVe1;
     private com.toedter.calendar.JDateChooser dateChooserDOB;
     private javax.swing.ButtonGroup gruopGioiTinh;
     private javax.swing.JLabel jLabel1;
@@ -462,7 +510,6 @@ public class formAdminStudent extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
