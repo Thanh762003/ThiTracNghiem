@@ -13,23 +13,7 @@ import java.sql.*;
  */
 public class Test {
     public static void main(String[] args) {
-        DeThi deThi = new DeThi("President of World");
-        CauHoi cauHoi = new CauHoi(deThi, "Vladimir Putin is the president of", "Russia", "Spain", "China", "Japan", "A");
-        
-        ArrayList<CauHoi> arr = new ArrayList<>();
-        
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi); 
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        arr.add(cauHoi);
-        
-        cauHoi.setDeThi(deThi);
-        deThi.save(arr);
+        new Student("Thanh Long", "0966119338", 'M', "thanhlong@gmail.com", "762003").save();
+        new Student("Minh Duc", "0654987956", 'F', "minhduc@gmail.com", "08097fasd").save();
     }
 }

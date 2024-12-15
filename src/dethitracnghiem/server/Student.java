@@ -82,29 +82,28 @@ public class Student {
         this.matKhau = matKhau;
     }
     
-    public static void taoBang() {
-        String bangThiSinh = "CREATE TABLE ThiSinh (\n" +
-                            "    MaThiSinh INTEGER PRIMARY KEY IDENTITY(1, 1),\n" +
-                            "    HoTen NVARCHAR(MAX),\n" +
-                            "    SoDienThoai NVARCHAR(20),\n" +
-                            "    Email NVARCHAR(250),\n" +
-                            "    Password NVARCHAR(250),\n" +
-                            "    GioiTinh NCHAR(3),\n" +
-                            ")";
-         
-        System.out.println(bangThiSinh);
+    public boolean save() {
+        String insertThiSinh = "INSERT INTO ThiSinh (HoTen, SoDienThoai, Email, Password, GioiTinh) VALUES (?, ?, ?, ?, ?)";
         
-        try(Connection connection = new DBConnection().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(bangThiSinh);
-            boolean b = ps.execute();
-            System.out.println("Table Students is created");
-            System.out.println(b);
+        try {
+            try(Connection connection = new DBConnection().getConnection()) {
+               PreparedStatement ps = connection.prepareStatement(insertThiSinh);
+               
+               ps.setString(1, this.hoTen);
+               ps.setString(2, this.soDienThoai);
+               ps.setString(3, this.email);
+               ps.setString(4, this.matKhau);
+               ps.setString(5, String.valueOf(this.gioiTinh));
+               
+               int i = ps.executeUpdate();
+               
+               System.out.println("Updated rows: " + i);
+               return true;
+            }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-    }
-    
-    public static void main(String[] args) {
-        taoBang();
+        
+        return false;
     }
 }
