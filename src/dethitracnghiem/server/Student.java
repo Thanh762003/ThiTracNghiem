@@ -4,6 +4,7 @@
  */
 package dethitracnghiem.server;
 
+import java.sql.*;
 /**
  *
  * @author USER
@@ -81,5 +82,29 @@ public class Student {
         this.matKhau = matKhau;
     }
     
+    public static void taoBang() {
+        String bangThiSinh = "CREATE TABLE ThiSinh (\n" +
+                            "    MaThiSinh INTEGER PRIMARY KEY IDENTITY(1, 1),\n" +
+                            "    HoTen NVARCHAR(MAX),\n" +
+                            "    SoDienThoai NVARCHAR(20),\n" +
+                            "    Email NVARCHAR(250),\n" +
+                            "    Password NVARCHAR(250),\n" +
+                            "    GioiTinh NCHAR(3),\n" +
+                            ")";
+         
+        System.out.println(bangThiSinh);
+        
+        try(Connection connection = new DBConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(bangThiSinh);
+            boolean b = ps.execute();
+            System.out.println("Table Students is created");
+            System.out.println(b);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     
+    public static void main(String[] args) {
+        taoBang();
+    }
 }

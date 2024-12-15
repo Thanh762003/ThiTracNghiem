@@ -33,11 +33,9 @@ public class formAdminStudent extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtMaThiSinh = new javax.swing.JTextField();
         txtHoTen = new javax.swing.JTextField();
         txtSoDienThoai = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
@@ -81,10 +79,6 @@ public class formAdminStudent extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Mã thí sinh:");
-
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Họ và tên:");
@@ -96,10 +90,6 @@ public class formAdminStudent extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Email:");
-
-        txtMaThiSinh.setBackground(new java.awt.Color(255, 255, 255));
-        txtMaThiSinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtMaThiSinh.setForeground(new java.awt.Color(0, 0, 0));
 
         txtHoTen.setBackground(new java.awt.Color(255, 255, 255));
         txtHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -171,10 +161,6 @@ public class formAdminStudent extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(21, 21, 21)
-                        .addComponent(txtMaThiSinh))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(65, 65, 65)
                         .addComponent(txtEmail))
@@ -209,11 +195,7 @@ public class formAdminStudent extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtMaThiSinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addGap(123, 123, 123)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -399,7 +381,6 @@ public class formAdminStudent extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dateChooserDOB;
     private javax.swing.ButtonGroup gruopGioiTinh;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -418,7 +399,6 @@ public class formAdminStudent extends javax.swing.JFrame {
     private javax.swing.JTable tableDSThiSinh;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtHoTen;
-    private javax.swing.JTextField txtMaThiSinh;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtSoDienThoai;
     // End of variables declaration//GEN-END:variables
