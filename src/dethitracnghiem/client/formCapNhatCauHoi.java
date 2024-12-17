@@ -434,7 +434,7 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
             if(rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(this, "Câu hỏi đã cập nhật thành công");
                 this.dispose();
-                new formAdminHomeScreen().setVisible(true);
+                new formHomeScreen().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi với số: " + cauHoiSo, "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             }

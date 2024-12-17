@@ -6,6 +6,7 @@ package dethitracnghiem.server;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -55,5 +56,33 @@ public class UserService {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public static boolean dangNhap(String email, String password) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            DBConnection dbConnection = new DBConnection();
+            conn = dbConnection.getConnection();
+            
+            if(conn == null) {
+                return false;
+            }
+            
+            String checkLogin = "SELECT * FROM Users WHERE Email = ? AND Password = ?";
+            ps = conn.prepareStatement(checkLogin);
+            
+            ps.setString(1, email);
+            ps.setString(2, password);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        
+        return false;
     }
 }

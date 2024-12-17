@@ -382,7 +382,7 @@ public class formXoaCauHoi extends javax.swing.JFrame {
             if(rowsAffected > 0) {
                 JOptionPane.showMessageDialog(this, "Xóa câu hỏi đã thành công");
                 this.dispose();
-                new formAdminHomeScreen().setVisible(true);
+                new formHomeScreen().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi khi xóa.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             }

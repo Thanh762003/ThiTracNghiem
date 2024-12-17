@@ -295,7 +295,7 @@ public class formRegistration extends javax.swing.JFrame {
     
     private void dangKy() {
         String email = txtEmail.getText();
-        String password = new String(txtPassword.getText());
+        String password = new String(txtPassword.getPassword());
         String hoTen = txtHoTen.getText();
         String gioiTinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
         Date ngaySinh = dateChooserDOB.getDate();
@@ -345,7 +345,7 @@ public class formRegistration extends javax.swing.JFrame {
     private void btnTroVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTroVeActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new formAdminHomeScreen().setVisible(true);
+        new formHomeScreen().setVisible(true);
     }//GEN-LAST:event_btnTroVeActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed

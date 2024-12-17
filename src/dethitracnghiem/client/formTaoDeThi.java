@@ -493,7 +493,7 @@ public class formTaoDeThi extends javax.swing.JFrame {
             if(flag) {
                 JOptionPane.showMessageDialog(this, "Lưu danh sách câu hỏi đã thành công");
                 this.dispose();
-                new formAdminHomeScreen().setVisible(true);
+                new formHomeScreen().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Không lưu được danh sách câu hỏi! Vui lòng kiểm tra lại");
             }
