@@ -130,7 +130,7 @@ public class formLogin extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Đăng nhập thi trắc nghiệm");
+        jLabel1.setText("Đăng nhập tài khoản");
 
         btnLoginStudent.setBackground(new java.awt.Color(0, 255, 255));
         btnLoginStudent.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
