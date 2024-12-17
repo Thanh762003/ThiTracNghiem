@@ -283,6 +283,16 @@ public class formRegistration extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$";
+        return Pattern.matches(emailRegex, email);
+    }
+    
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String phoneRegex = "^[0-9]{10,15}$";
+        return Pattern.matches(phoneRegex, phoneNumber);
+    }
+    
     private void dangKy() {
         String email = txtEmail.getText();
         String password = new String(txtPassword.getText());
@@ -290,6 +300,31 @@ public class formRegistration extends javax.swing.JFrame {
         String gioiTinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
         Date ngaySinh = dateChooserDOB.getDate();
         String soDienThoai = txtSoDienThoai.getText();
+        
+        if(hoTen.isEmpty() || email.isEmpty() || password.isEmpty() || soDienThoai.isEmpty() || ngaySinh == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập điền đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(!isValidEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Email không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(soDienThoai.length() != 10) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải đúng 10 chữ số!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(password.length() < 6) {
+            JOptionPane.showMessageDialog(this, "Mật khẩu phải ít nhất 6 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(!isValidPhoneNumber(soDienThoai)) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         UserService userService = new UserService();
         
@@ -315,6 +350,8 @@ public class formRegistration extends javax.swing.JFrame {
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        new formLogin().setVisible(true);
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     /**
