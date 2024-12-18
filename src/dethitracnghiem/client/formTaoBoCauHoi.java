@@ -6,6 +6,7 @@ package dethitracnghiem.client;
 
 import dethitracnghiem.server.CauHoi;
 import dethitracnghiem.server.DeThi;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,18 +19,18 @@ import javax.swing.JOptionPane;
  * @author USER
  */
 
-public class formTaoDeThi extends javax.swing.JFrame {
-    private DeThi deThi = null;
-    private ArrayList<CauHoi> cauHoiList = new ArrayList<>();
-    private int cauHoiSo = 0;
+public class formTaoBoCauHoi extends javax.swing.JFrame {
+    private int cauHoiSo = 1;
+    
+    private DeThi deThi = null; 
+    private ArrayList<CauHoi> cacCauHoi = new ArrayList<>();
     /**
      * Creates new form formTaoDeThi
      */
-    public formTaoDeThi() {
+    public formTaoBoCauHoi() {
         initComponents();
-        
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,13 +64,9 @@ public class formTaoDeThi extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtMonThi = new javax.swing.JTextField();
-        btnSetDeThi = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        txtMonThi1 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        txtMonThi2 = new javax.swing.JTextField();
-        txtMonThi3 = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        txtMaDeThi = new javax.swing.JTextField();
+        btnTaoMonThi = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNoiDung = new javax.swing.JTextArea();
         lblCauHoiSo = new javax.swing.JLabel();
@@ -80,16 +77,14 @@ public class formTaoDeThi extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("TẠO BỘ CÂU HỎI");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(545, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(379, 379, 379))
+            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,75 +173,46 @@ public class formTaoDeThi extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(153, 255, 255));
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Môn thi:");
 
         txtMonThi.setBackground(new java.awt.Color(255, 255, 255));
         txtMonThi.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
-        btnSetDeThi.setBackground(new java.awt.Color(153, 0, 255));
-        btnSetDeThi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSetDeThi.setForeground(new java.awt.Color(255, 255, 255));
-        btnSetDeThi.setText("Tạo đề thi");
-        btnSetDeThi.addActionListener(new java.awt.event.ActionListener() {
+        jLabel14.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("Mã đề thi:");
+
+        txtMaDeThi.setBackground(new java.awt.Color(255, 255, 255));
+        txtMaDeThi.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        btnTaoMonThi.setBackground(new java.awt.Color(102, 0, 153));
+        btnTaoMonThi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnTaoMonThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTaoMonThi.setText("Tạo đề thi");
+        btnTaoMonThi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSetDeThiActionPerformed(evt);
+                btnTaoMonThiActionPerformed(evt);
             }
         });
-
-        jLabel10.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Mã đề thi:");
-
-        txtMonThi1.setBackground(new java.awt.Color(255, 255, 255));
-        txtMonThi1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("Phòng thi");
-
-        txtMonThi2.setBackground(new java.awt.Color(255, 255, 255));
-        txtMonThi2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        txtMonThi3.setBackground(new java.awt.Color(255, 255, 255));
-        txtMonThi3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel12.setText("Số lượng câu hỏi:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMonThi2, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMonThi1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(177, 177, 177)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSetDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMonThi3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(txtMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addComponent(btnTaoMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -254,19 +220,13 @@ public class formTaoDeThi extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSetDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtMonThi1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(txtMonThi2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14)
+                    .addComponent(txtMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel12)
-                        .addComponent(txtMonThi3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addComponent(txtMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTaoMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         txtNoiDung.setColumns(20);
@@ -337,8 +297,8 @@ public class formTaoDeThi extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlabel)
                     .addComponent(lblCauHoiSo))
@@ -385,7 +345,7 @@ public class formTaoDeThi extends javax.swing.JFrame {
     
     private boolean validateFields() {
         if(deThi == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập môn thi", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin đề thi", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         
@@ -394,24 +354,24 @@ public class formTaoDeThi extends javax.swing.JFrame {
         String B = this.txtB.getText();
         String C = this.txtC.getText();
         String D = this.txtD.getText();
-        String chonDapAn = null;
+        String dapAn = null;
         
         if(rbtnA.isSelected()) {
-            chonDapAn = "A";
+            dapAn = "A";
         } else if(rbtnB.isSelected()) {
-            chonDapAn = "B";
+            dapAn = "B";
         } else if(rbtnC.isSelected()) {
-            chonDapAn = "C";
+            dapAn = "C";
         } else if(rbtnD.isSelected()) {
-            chonDapAn = "D";
-        }
+            dapAn = "D";
+        } 
         
         if(noiDung.trim().isEmpty() || A.trim().isEmpty() || B.trim().isEmpty() || C.trim().isEmpty() || D.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập nội dung câu hỏi và 4 đáp án", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ nội dung và 4 đáp án", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
         } else {
-            if(chonDapAn == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn đáp án đúng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            if(dapAn == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn đáp án đúng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return false;
             } else {
                 return true;
@@ -421,26 +381,10 @@ public class formTaoDeThi extends javax.swing.JFrame {
     
     private void btnCauTiepTheoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCauTiepTheoActionPerformed
         // TODO add your handling code here:
-        if(themCauHoi()) {
-            cauHoiSo++;
-            lblCauHoiSo.setText(String.valueOf(cauHoiSo + 1));
-        }
+        createCauHoi();
     }//GEN-LAST:event_btnCauTiepTheoActionPerformed
-        
-    private void btnSetDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDeThiActionPerformed
-        // TODO add your handling code here:
-        String monThi = txtMonThi.getText();
-        
-        if(monThi.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập môn thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Tạo đề thi đã thành công!");
-            txtMonThi.setEditable(false);
-            this.deThi = new DeThi(monThi);
-        }
-    }//GEN-LAST:event_btnSetDeThiActionPerformed
-    
-    private boolean themCauHoi() {
+
+    private boolean createCauHoi() {
         boolean valid = validateFields();
         CauHoi cauHoi = new CauHoi();
         
@@ -450,7 +394,6 @@ public class formTaoDeThi extends javax.swing.JFrame {
             cauHoi.setC(txtC.getText().trim());
             cauHoi.setD(txtD.getText().trim());
             
-                
             String dapAn = null;
             
             if(rbtnA.isSelected()) {
@@ -461,10 +404,11 @@ public class formTaoDeThi extends javax.swing.JFrame {
                 dapAn = "C";
             } else if(rbtnD.isSelected()) {
                 dapAn = "D";
-            } 
+            }
             
             cauHoi.setDapAn(dapAn);
             cauHoi.setNoiDung(this.txtNoiDung.getText().trim());
+            cauHoi.setCauHoiSo(cauHoiSo);
             
             this.txtNoiDung.setText("");
             txtA.setText("");
@@ -473,33 +417,53 @@ public class formTaoDeThi extends javax.swing.JFrame {
             txtD.setText("");
             groupChonDapAn.clearSelection();
             
-            cauHoiList.add(cauHoi);
+            cacCauHoi.add(cauHoi);
             
             cauHoi.setDeThi(deThi);
             
-            return true;
-        } else {
-            return false;
+            System.out.println(cacCauHoi);
+            System.out.println(deThi);
+            
+            cauHoiSo++;
+            lblCauHoiSo.setText(String.valueOf(cauHoiSo));
         }
+        
+        return valid;
     }
     
     private void btnLuuDSCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuDSCauHoiActionPerformed
-        // TODO add your handling code here:
-        boolean flag = themCauHoi();
+//        // TODO add your handling code here:
+        boolean flag = createCauHoi();
         
         if(flag) {
-            flag = deThi.save(cauHoiList);
+            flag = deThi.save(cacCauHoi);
             
             if(flag) {
-                JOptionPane.showMessageDialog(this, "Lưu danh sách câu hỏi đã thành công");
+                JOptionPane.showMessageDialog(null, "Lưu danh sách câu hỏi đã thành công");
                 this.dispose();
-                new formHomeScreen().setVisible(true);
+                new formQuanLyDeThi().setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Không lưu được danh sách câu hỏi! Vui lòng kiểm tra lại");
+                JOptionPane.showMessageDialog(null, "Không lưu được danh sách câu hỏi", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             }
         }
-        
     }//GEN-LAST:event_btnLuuDSCauHoiActionPerformed
+
+    private void btnTaoMonThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMonThiActionPerformed
+        // TODO add your handling code here:
+        String maDeThi = txtMaDeThi.getText();
+        String monThi = txtMonThi.getText();
+        
+        if(maDeThi.trim().isEmpty() || monThi.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ đề thi");
+        } else {
+            txtMaDeThi.setEditable(false);
+            txtMonThi.setEditable(false);
+            
+            JOptionPane.showMessageDialog(this, "Tạo đề thi đã thành công");
+            
+            this.deThi = new DeThi(maDeThi, monThi);
+        }
+    }//GEN-LAST:event_btnTaoMonThiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -518,20 +482,21 @@ public class formTaoDeThi extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formTaoDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formTaoBoCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formTaoDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formTaoBoCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formTaoDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formTaoBoCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formTaoDeThi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formTaoBoCauHoi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formTaoDeThi().setVisible(true);
+                new formTaoBoCauHoi().setVisible(true);
             }
         });
     }
@@ -539,12 +504,10 @@ public class formTaoDeThi extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCauTiepTheo;
     private javax.swing.JButton btnLuuDSCauHoi;
-    private javax.swing.JButton btnSetDeThi;
+    private javax.swing.JButton btnTaoMonThi;
     private javax.swing.ButtonGroup groupChonDapAn;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -566,12 +529,9 @@ public class formTaoDeThi extends javax.swing.JFrame {
     private javax.swing.JTextField txtB;
     private javax.swing.JTextField txtC;
     private javax.swing.JTextField txtD;
+    private javax.swing.JTextField txtMaDeThi;
     private javax.swing.JTextField txtMonThi;
-    private javax.swing.JTextField txtMonThi1;
-    private javax.swing.JTextField txtMonThi2;
-    private javax.swing.JTextField txtMonThi3;
     private javax.swing.JTextArea txtNoiDung;
     // End of variables declaration//GEN-END:variables
 
-    
 }

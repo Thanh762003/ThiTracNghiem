@@ -4,10 +4,9 @@
  */
 package dethitracnghiem.client;
 
-import dethitracnghiem.server.UserService;
+import dethitracnghiem.server.AdminEmailPassword;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -32,6 +31,12 @@ public class formLogin extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtEmailAdmin = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtPasswordAdmin = new javax.swing.JPasswordField();
+        btnLoginAdmin = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -47,15 +52,67 @@ public class formLogin extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 204));
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Đăng nhập Admin");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Email");
+
+        txtEmailAdmin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Password");
+
+        txtPasswordAdmin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+
+        btnLoginAdmin.setBackground(new java.awt.Color(0, 255, 255));
+        btnLoginAdmin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnLoginAdmin.setForeground(new java.awt.Color(0, 0, 0));
+        btnLoginAdmin.setText("ĐĂNG NHẬP");
+        btnLoginAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginAdminActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLoginAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel9)
+                        .addComponent(jLabel8)
+                        .addComponent(txtPasswordAdmin)
+                        .addComponent(txtEmailAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel2)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtEmailAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65))
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18)
+                .addComponent(txtPasswordAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addComponent(btnLoginAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
         );
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 51));
@@ -91,16 +148,15 @@ public class formLogin extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(44, 44, 44)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel6)
-                        .addComponent(txtEmail)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 714, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+                    .addComponent(txtEmail))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -118,7 +174,7 @@ public class formLogin extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(69, 69, 69))
         );
@@ -149,9 +205,9 @@ public class formLogin extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -175,37 +231,59 @@ public class formLogin extends javax.swing.JFrame {
     
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         // TODO add your handling code here:
-        String email = txtEmail.getText();
-        String password = new String(txtPassword.getPassword());
-        
-        if(email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập điền đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(!isValidEmail(email)) {
-            JOptionPane.showMessageDialog(this, "Email không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(password.length() < 6) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu phải ít nhất 6 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(UserService.dangNhap(email, password)) {
-            try {
-                JOptionPane.showMessageDialog(this, "Đăng nhập tài khoản đã Thành công");
-                this.dispose();
-                new formHomeScreen().setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(0);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Đăng nhập tài khoản đã Thành công", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-        }
+//        String email = txtEmail.getText();
+//        String password = new String(txtPassword.getPassword());
+//        
+//        if(email.isEmpty() || password.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập điền đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
+//        
+//        if(!isValidEmail(email)) {
+//            JOptionPane.showMessageDialog(this, "Email không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
+//        
+//        if(password.length() < 6) {
+//            JOptionPane.showMessageDialog(this, "Mật khẩu phải ít nhất 6 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
+//        
+//        if(UserService.dangNhap(email, password)) {
+//            try {
+//                String hoTen = UserService.getHoTenByEmail(email);
+//                
+//                JOptionPane.showMessageDialog(this, "Đăng nhập tài khoản đã Thành công");
+//                
+//                formQuanLyDeThi fQuanLyDeThi = new formQuanLyDeThi(hoTen);
+//                
+//                this.dispose();
+//                fQuanLyDeThi.setVisible(true);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                System.exit(0);
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Đăng nhập tài khoản đã Thành công", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_btnDangNhapActionPerformed
+
+    private void btnLoginAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAdminActionPerformed
+        // TODO add your handling code here:
+        String email = txtEmailAdmin.getText();
+        String password = new String(txtPasswordAdmin.getPassword());
+        
+        if(email.trim().equalsIgnoreCase(AdminEmailPassword.email) && password.trim().equalsIgnoreCase(AdminEmailPassword.password)) {
+            System.out.println("Admin Login Success");
+            
+            this.dispose();
+            new formQuanLyDeThi().setVisible(true);
+        } else {
+            System.out.println("Admin Login Failed");
+        }
+        
+        System.out.println(email + " ---> " + password);
+    }//GEN-LAST:event_btnLoginAdminActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,14 +322,20 @@ public class formLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
+    private javax.swing.JButton btnLoginAdmin;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtEmailAdmin;
     private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JPasswordField txtPasswordAdmin;
     // End of variables declaration//GEN-END:variables
 }

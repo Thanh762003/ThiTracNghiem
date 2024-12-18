@@ -8,6 +8,8 @@ import dethitracnghiem.server.CauHoi;
 import dethitracnghiem.server.DBConnection;
 import dethitracnghiem.server.DeThi;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,15 +17,176 @@ import javax.swing.JOptionPane;
  * @author USER
  */
 public class formCapNhatCauHoi extends javax.swing.JFrame {
-    private CauHoi cauHoi;
     /**
      * Creates new form formCapNhatCauHoi
      */
     public formCapNhatCauHoi() {
         initComponents();
         loadMonThi();
+        
+        
     }
 
+    private void loadMonThi() {
+        Connection con = new DBConnection().getConnection();
+        String listMonThi = "SELECT DISTINCT MonThi FROM DeThi";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(listMonThi);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                cboxMonThi.addItem(rs.getString("MonThi"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách môn thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadMaDeThi(String monThi) {
+        cboxMaDeThi.removeAllItems();
+        Connection conn = new DBConnection().getConnection();
+        String listMaDeThi = "SELECT MaDeThi FROM DeThi WHERE MonThi = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(listMaDeThi);
+            ps.setString(1, monThi);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                cboxMaDeThi.addItem(rs.getString("MaDeThi"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách mã đề thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private int getDeThiID(String maDeThi) {
+        int deThiID = -1;
+        Connection conn = new DBConnection().getConnection();
+        String query = "SELECT ID FROM DeThi WHERE MaDeThi = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, maDeThi);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                deThiID = rs.getInt("ID");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi lấy DeThiID: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return deThiID;
+    }
+    
+    private void loadCauHoiSo(int deThiID) {
+        cboxCauHoiSo.removeAllItems();
+        Connection conn = new DBConnection().getConnection();
+        
+        try {
+            String numberQuestion = "SELECT CauhoiSo FROM CauHoi WHERE DeThiID = ?";
+            PreparedStatement ps = conn.prepareStatement(numberQuestion);
+            ps.setInt(1, deThiID);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                cboxCauHoiSo.addItem(String.valueOf(rs.getInt("CauHoiSo")));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadCauHoiDetails(int cauHoiSo, int deThiID) {
+        Connection conn = new DBConnection().getConnection();
+        String detailsQuestion = "SELECT * FROM CauHoi WHERE CauHoiSo = ? AND DeThiID = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(detailsQuestion);
+            
+            ps.setInt(1, cauHoiSo);
+            ps.setInt(2, deThiID);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                txtNoiDung.setText(rs.getString("NoiDung"));
+                txtA.setText(rs.getString("A"));
+                txtB.setText(rs.getString("B"));
+                txtC.setText(rs.getString("C"));
+                txtD.setText(rs.getString("D"));
+                
+                String dapAn = rs.getString("DapAn");
+                
+                switch(dapAn) {
+                    case "A":
+                        rbtnA.setSelected(true);
+                        break;
+                    case "B":
+                        rbtnB.setSelected(true);
+                        break;
+                    case "C":
+                        rbtnC.setSelected(true);
+                        break;
+                    case "D":
+                        rbtnD.setSelected(true);
+                        break;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải thông tin câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void updateCauHoi(int cauHoiSo, int deThiID) {
+        String noiDung = txtNoiDung.getText();
+        String A = txtA.getText();
+        String B = txtB.getText();
+        String C = txtC.getText();
+        String D = txtD.getText();
+        
+        if(noiDung.isEmpty() || A.isEmpty() || B.isEmpty() || C.isEmpty() || D.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ nội dung và 4 đáp án", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String dapAn = rbtnA.isSelected() ? "A" : rbtnB.isSelected() ? "B" : rbtnC.isSelected() ? "C" : "D";
+        
+        if(dapAn == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn đáp án đúng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Connection conn = new DBConnection().getConnection();
+        String update = "UPDATE CauHoi SET NoiDung = ?, A = ?, B = ?, C = ?, D = ?, DapAn = ? \n"
+                        + "WHERE CauHoiSo = ? AND DeThiID = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(update);
+            
+            ps.setString(1, noiDung);
+            ps.setString(2, A);
+            ps.setString(3, B);
+            ps.setString(4, C);
+            ps.setString(5, D);
+            ps.setString(6, dapAn);
+            ps.setInt(7, cauHoiSo);
+            ps.setInt(8, deThiID);
+            
+            int rows = ps.executeUpdate();
+            
+            if(rows > 0) {
+                JOptionPane.showMessageDialog(this, "Cập nhật câu hỏi đã Thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi để cập nhật", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi cập nhật câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,8 +197,10 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
     private void initComponents() {
 
         groupChonDapAn = new javax.swing.ButtonGroup();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
+        btnQuanLyDeThi = new javax.swing.JButton();
         jlabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -54,13 +219,27 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         txtB = new javax.swing.JTextField();
         txtC = new javax.swing.JTextField();
         txtD = new javax.swing.JTextField();
-        txtCauHoiSo = new javax.swing.JTextField();
-        btnTimKiem = new javax.swing.JButton();
+        btnTimKiemCauHoi = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cboxMonThi = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        cboxMaDeThi = new javax.swing.JComboBox<>();
+        btnTimKiemDeThi = new javax.swing.JButton();
+        cboxCauHoiSo = new javax.swing.JComboBox<>();
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,20 +248,39 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("CẬP NHẬT CÂU HỎI");
+        jLabel7.setText("CẬP NHẬT ĐỀ THI");
+
+        btnQuanLyDeThi.setBackground(new java.awt.Color(102, 0, 102));
+        btnQuanLyDeThi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnQuanLyDeThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyDeThi.setText("Quản lý đề thi");
+        btnQuanLyDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuanLyDeThiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnQuanLyDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel7)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(btnQuanLyDeThi)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jlabel.setBackground(new java.awt.Color(0, 0, 0));
@@ -133,28 +331,31 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         rbtnD.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         rbtnD.setText("D");
 
+        txtNoiDung.setBackground(new java.awt.Color(255, 255, 255));
         txtNoiDung.setColumns(20);
         txtNoiDung.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txtNoiDung.setRows(5);
         jScrollPane1.setViewportView(txtNoiDung);
 
+        txtA.setBackground(new java.awt.Color(255, 255, 255));
         txtA.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        txtB.setBackground(new java.awt.Color(255, 255, 255));
         txtB.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        txtC.setBackground(new java.awt.Color(255, 255, 255));
         txtC.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        txtD.setBackground(new java.awt.Color(255, 255, 255));
         txtD.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
-        txtCauHoiSo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        btnTimKiem.setBackground(new java.awt.Color(0, 255, 255));
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnTimKiem.setForeground(new java.awt.Color(0, 0, 0));
-        btnTimKiem.setText("Tìm kiếm");
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+        btnTimKiemCauHoi.setBackground(new java.awt.Color(153, 153, 0));
+        btnTimKiemCauHoi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnTimKiemCauHoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemCauHoi.setText("Tìm kiếm câu hỏi");
+        btnTimKiemCauHoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTimKiemActionPerformed(evt);
+                btnTimKiemCauHoiActionPerformed(evt);
             }
         });
 
@@ -189,16 +390,46 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         cboxMonThi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cboxMonThi.setForeground(new java.awt.Color(0, 0, 0));
 
+        jLabel10.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Mã đề thi:");
+
+        cboxMaDeThi.setBackground(new java.awt.Color(255, 255, 255));
+        cboxMaDeThi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cboxMaDeThi.setForeground(new java.awt.Color(0, 0, 0));
+        cboxMaDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxMaDeThiActionPerformed(evt);
+            }
+        });
+
+        btnTimKiemDeThi.setBackground(new java.awt.Color(0, 102, 153));
+        btnTimKiemDeThi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnTimKiemDeThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemDeThi.setText("Tìm kiếm đề thi");
+        btnTimKiemDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemDeThiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addGap(18, 18, 18)
+                .addComponent(cboxMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(340, 340, 340))
+                .addGap(91, 91, 91)
+                .addComponent(btnTimKiemDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,9 +437,21 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(btnTimKiemDeThi)
+                    .addComponent(cboxMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
+
+        cboxCauHoiSo.setBackground(new java.awt.Color(255, 255, 255));
+        cboxCauHoiSo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cboxCauHoiSo.setForeground(new java.awt.Color(0, 0, 0));
+        cboxCauHoiSo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxCauHoiSoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -239,6 +482,10 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
                             .addComponent(txtA)
                             .addComponent(txtD)))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
@@ -253,14 +500,10 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jlabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(btnTimKiem)))
-                        .addGap(0, 575, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(cboxCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
+                                .addComponent(btnTimKiemCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -269,13 +512,13 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlabel)
-                        .addComponent(txtCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnTimKiem))
+                        .addComponent(cboxCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnTimKiemCauHoi))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -320,141 +563,110 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void timKiemCauHoiSo(int cauHoiSo) {
-        String query = "SELECT * FROM CauHoi WHERE CauHoiSo = ?";
-        Connection con = new DBConnection().getConnection();
-        
-        try {
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, cauHoiSo);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()) {
-                DeThi deThi = new DeThi();
-                cauHoi = new CauHoi(
-                        deThi, 
-                        rs.getString("NoiDung"), 
-                        rs.getString("A"), 
-                        rs.getString("B"), 
-                        rs.getString("C"), 
-                        rs.getString("D"), 
-                        rs.getString("DapAn")
-                );
-                
-                loadCauHoi();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi với số: " + cauHoiSo, "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
     
-    private void loadMonThi() {
-        String searchMonThi = "SELECT MonThi FROM Dethi";
-        Connection con = new DBConnection().getConnection();
-        
-        try {
-            PreparedStatement ps = con.prepareStatement(searchMonThi);
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()) {
-                cboxMonThi.addItem(rs.getString("MonThi"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void loadCauHoi() {
-        txtNoiDung.setText(cauHoi.getNoiDung());
-        txtA.setText(cauHoi.getA());
-        txtB.setText(cauHoi.getB());
-        txtC.setText(cauHoi.getC());
-        txtD.setText(cauHoi.getD());
-        
-        switch(cauHoi.getDapAn()) {
-            case "A":
-                rbtnA.setSelected(true);
-                break;
-            case "B":
-                rbtnB.setSelected(true);
-                break;
-            case "C":
-                rbtnC.setSelected(true);
-                break;
-            case "D":
-                rbtnD.setSelected(true);
-                break;
-        }
-    }
-    
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemCauHoiActionPerformed
         // TODO add your handling code here:
-        int cauHoiSo = Integer.parseInt(txtCauHoiSo.getText());
-        timKiemCauHoiSo(cauHoiSo);
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
+        
+        if(selectedMaDeThi == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int deThiID = getDeThiID(selectedMaDeThi);
+        
+        if(deThiID == -1) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy DeThiID!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String selectedCauHoiSo = (String) cboxCauHoiSo.getSelectedItem();
+        
+        if(selectedCauHoiSo == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn câu hỏi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int cauHoiSo = Integer.parseInt(selectedCauHoiSo);
+        
+        loadCauHoiDetails(cauHoiSo, deThiID);
+    }//GEN-LAST:event_btnTimKiemCauHoiActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here
-        int cauHoiSo = Integer.parseInt(txtCauHoiSo.getText());
-        String noiDung = txtNoiDung.getText();
-        String A = txtA.getText();
-        String B = txtB.getText();
-        String C = txtC.getText();
-        String D = txtD.getText();
-        String dapAn = "";
+        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
         
-        if(rbtnA.isSelected()) {
-            dapAn = "A";
-        } else if(rbtnB.isSelected()) {
-            dapAn = "B";
-        } else if(rbtnC.isSelected()) {
-            dapAn = "B";
-        } else if(rbtnD.isSelected()) {
-            dapAn = "B";
-        } 
-        
-        String updateCauHoi = "UPDATE CauHoi SET NoiDung = ?, A = ?, B = ?, C = ?, D = ?, DapAn = ? WHERE CauHoiSo = ?";
-        
-        try (Connection con = new DBConnection().getConnection()){
-            PreparedStatement ps = con.prepareStatement(updateCauHoi);
-            
-            ps.setString(1, noiDung);
-            ps.setString(2, A);
-            ps.setString(3, B);
-            ps.setString(4, C);
-            ps.setString(5, D);
-            ps.setString(6, dapAn);
-            ps.setInt(7, cauHoiSo);
-            
-            int rowsUpdated = ps.executeUpdate();
-            
-            if(rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(this, "Câu hỏi đã cập nhật thành công");
-                this.dispose();
-                new formHomeScreen().setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi với số: " + cauHoiSo, "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if(selectedMaDeThi == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+        
+        int deThiID = getDeThiID(selectedMaDeThi);
+        
+        if(deThiID == -1) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy DeThiID!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String selectedCauHoiSo = (String) cboxCauHoiSo.getSelectedItem();
+        
+        if(selectedCauHoiSo == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn câu hỏi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int cauHoiSo = Integer.parseInt(selectedCauHoiSo);
+        
+        updateCauHoi(cauHoiSo, deThiID);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        txtCauHoiSo.setText("");
         txtNoiDung.setText("");
         txtA.setText("");
         txtB.setText("");
         txtC.setText("");
         txtD.setText("");
+        
         groupChonDapAn.clearSelection();
-        txtCauHoiSo.setEditable(true);
+        
+        cboxMonThi.setSelectedIndex(-1);
+        cboxMaDeThi.setSelectedItem(-1);
+        cboxCauHoiSo.setSelectedIndex(-1);
     }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnTimKiemDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemDeThiActionPerformed
+        // TODO add your handling code here:
+        String monThi = (String) cboxMonThi.getSelectedItem();
+        
+        if(monThi != null) {
+            loadMaDeThi(monThi);
+        }
+    }//GEN-LAST:event_btnTimKiemDeThiActionPerformed
+
+    private void cboxCauHoiSoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxCauHoiSoActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cboxCauHoiSoActionPerformed
+
+    private void cboxMaDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxMaDeThiActionPerformed
+        // TODO add your handling code here:
+        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
+        
+        if(selectedMaDeThi != null) {
+            int deThiID = getDeThiID(selectedMaDeThi);
+            
+            if(deThiID != -1) {
+                loadCauHoiSo(deThiID);;
+            }
+        }
+    }//GEN-LAST:event_cboxMaDeThiActionPerformed
+
+    private void btnQuanLyDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDeThiActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new formQuanLyDeThi().setVisible(true);
+    }//GEN-LAST:event_btnQuanLyDeThiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -493,11 +705,16 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnTimKiem;
+    private javax.swing.JButton btnQuanLyDeThi;
+    private javax.swing.JButton btnTimKiemCauHoi;
+    private javax.swing.JButton btnTimKiemDeThi;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cboxCauHoiSo;
+    private javax.swing.JComboBox<String> cboxMaDeThi;
     private javax.swing.JComboBox<String> cboxMonThi;
     private javax.swing.ButtonGroup groupChonDapAn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -506,6 +723,7 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -517,7 +735,6 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
     private javax.swing.JTextField txtA;
     private javax.swing.JTextField txtB;
     private javax.swing.JTextField txtC;
-    private javax.swing.JTextField txtCauHoiSo;
     private javax.swing.JTextField txtD;
     private javax.swing.JTextArea txtNoiDung;
     // End of variables declaration//GEN-END:variables

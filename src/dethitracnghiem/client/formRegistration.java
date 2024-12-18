@@ -4,7 +4,7 @@
  */
 package dethitracnghiem.client;
 
-import dethitracnghiem.server.UserService;
+//import dethitracnghiem.server.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -283,69 +283,15 @@ public class formRegistration extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$";
-        return Pattern.matches(emailRegex, email);
-    }
-    
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^[0-9]{10,15}$";
-        return Pattern.matches(phoneRegex, phoneNumber);
-    }
-    
-    private void dangKy() {
-        String email = txtEmail.getText();
-        String password = new String(txtPassword.getPassword());
-        String hoTen = txtHoTen.getText();
-        String gioiTinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
-        Date ngaySinh = dateChooserDOB.getDate();
-        String soDienThoai = txtSoDienThoai.getText();
-        
-        if(hoTen.isEmpty() || email.isEmpty() || password.isEmpty() || soDienThoai.isEmpty() || ngaySinh == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập điền đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(!isValidEmail(email)) {
-            JOptionPane.showMessageDialog(this, "Email không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(soDienThoai.length() != 10) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại phải đúng 10 chữ số!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(password.length() < 6) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu phải ít nhất 6 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if(!isValidPhoneNumber(soDienThoai)) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại không chính xác định dạng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        UserService userService = new UserService();
-        
-        boolean isSuccess = userService.dangKy(email, password, hoTen, gioiTinh, ngaySinh, soDienThoai);
-        
-        if(isSuccess) {
-            JOptionPane.showMessageDialog(this, "Đăng ký tài khoản đã Thành công");
-        } else {
-            JOptionPane.showMessageDialog(this, "Đăng ký tài khoản đã Thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
     
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
         // TODO add your handling code here:
-        dangKy();
     }//GEN-LAST:event_btnDangKyActionPerformed
 
     private void btnTroVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTroVeActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new formHomeScreen().setVisible(true);
+        new formQuanLyDeThi().setVisible(true);
     }//GEN-LAST:event_btnTroVeActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed

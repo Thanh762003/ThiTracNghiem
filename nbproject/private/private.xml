@@ -3,18 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formAdminHomeScreen.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/UserService.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formRegistration.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formTaoBoCauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/CauHoi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formCapNhatCauHoi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formDanhSachDeThi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formLogin.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DeThi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formTaoDeThi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formXoaCauHoi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/Test.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DBConnection.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formQuanLyDeThi.java</file>
         </group>
     </open-files>
 </project-private>
