@@ -7,10 +7,12 @@ package dethitracnghiem.client;
 import dethitracnghiem.server.CauHoi;
 import dethitracnghiem.server.DBConnection;
 import dethitracnghiem.server.DeThi;
+import dethitracnghiem.server.DeleteCauHoi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,14 +20,28 @@ import javax.swing.JOptionPane;
  * @author USER
  */
 public class formXoaCauHoi extends javax.swing.JFrame {
-    private CauHoi cauHoi;
+    private DeleteCauHoi delete;
     /**
      * Creates new form formXoaCauHoi
      */
     public formXoaCauHoi() {
         initComponents();
+        delete = new DeleteCauHoi();
+        loadMonThi();
     }
-
+    
+    private void loadMonThi() {
+        try {
+            List<DeThi> dsDeThi = delete.loadDeThi();
+            cboxMonThi.removeAllItems();
+            
+            for(DeThi deThi : dsDeThi) {
+                cboxMonThi.addItem(deThi.getMonThi());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách môn thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,9 +53,9 @@ public class formXoaCauHoi extends javax.swing.JFrame {
 
         groupChonDapAn = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        btnQuanLyDeThi = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jlabel = new javax.swing.JLabel();
-        txtCauHoiSo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNoiDung = new javax.swing.JTextArea();
@@ -58,12 +74,30 @@ public class formXoaCauHoi extends javax.swing.JFrame {
         rbtnC = new javax.swing.JRadioButton();
         rbtnD = new javax.swing.JRadioButton();
         btnClear = new javax.swing.JButton();
-        btnTimKiem = new javax.swing.JButton();
+        btnTimKiemCauHoi = new javax.swing.JButton();
         btnXoaCauHoi = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        cboxMonThi = new javax.swing.JComboBox<>();
+        btnTimKiemDeThi = new javax.swing.JButton();
+        cboxMaDeThi = new javax.swing.JComboBox<>();
+        cboxCauHoiSo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 0, 51));
+
+        btnQuanLyDeThi.setBackground(new java.awt.Color(153, 0, 51));
+        btnQuanLyDeThi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnQuanLyDeThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyDeThi.setText("Quản lý đề thi");
+        btnQuanLyDeThi.setBorder(null);
+        btnQuanLyDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuanLyDeThiActionPerformed(evt);
+            }
+        });
 
         jLabel7.setBackground(new java.awt.Color(153, 0, 51));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
@@ -75,21 +109,28 @@ public class formXoaCauHoi extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1123, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnQuanLyDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnQuanLyDeThi)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jlabel.setBackground(new java.awt.Color(0, 0, 0));
         jlabel.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         jlabel.setText("Câu hỏi số:");
-
-        txtCauHoiSo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
@@ -158,13 +199,13 @@ public class formXoaCauHoi extends javax.swing.JFrame {
             }
         });
 
-        btnTimKiem.setBackground(new java.awt.Color(0, 255, 255));
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnTimKiem.setForeground(new java.awt.Color(0, 0, 0));
-        btnTimKiem.setText("Tìm kiếm");
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+        btnTimKiemCauHoi.setBackground(new java.awt.Color(153, 153, 0));
+        btnTimKiemCauHoi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnTimKiemCauHoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemCauHoi.setText("Tìm kiếm câu hỏi");
+        btnTimKiemCauHoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTimKiemActionPerformed(evt);
+                btnTimKiemCauHoiActionPerformed(evt);
             }
         });
 
@@ -178,11 +219,78 @@ public class formXoaCauHoi extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(0, 204, 204));
+
+        jLabel10.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Mã đề thi:");
+
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Môn thi:");
+
+        cboxMonThi.setBackground(new java.awt.Color(255, 255, 255));
+        cboxMonThi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cboxMonThi.setForeground(new java.awt.Color(0, 0, 0));
+
+        btnTimKiemDeThi.setBackground(new java.awt.Color(0, 102, 153));
+        btnTimKiemDeThi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnTimKiemDeThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemDeThi.setText("Tìm kiếm đề thi");
+        btnTimKiemDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemDeThiActionPerformed(evt);
+            }
+        });
+
+        cboxMaDeThi.setBackground(new java.awt.Color(255, 255, 255));
+        cboxMaDeThi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cboxMaDeThi.setForeground(new java.awt.Color(0, 0, 0));
+        cboxMaDeThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxMaDeThiActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addGap(18, 18, 18)
+                .addComponent(cboxMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91)
+                .addComponent(btnTimKiemDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(btnTimKiemDeThi)
+                    .addComponent(cboxMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
+
+        cboxCauHoiSo.setBackground(new java.awt.Color(255, 255, 255));
+        cboxCauHoiSo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,40 +315,50 @@ public class formXoaCauHoi extends javax.swing.JFrame {
                             .addComponent(txtA)
                             .addComponent(txtD)))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(40, 40, 40)
+                        .addComponent(rbtnA)
+                        .addGap(54, 54, 54)
+                        .addComponent(rbtnB)
+                        .addGap(63, 63, 63)
+                        .addComponent(rbtnC)
+                        .addGap(67, 67, 67)
+                        .addComponent(rbtnD)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(40, 40, 40)
-                                .addComponent(rbtnA)
-                                .addGap(54, 54, 54)
-                                .addComponent(rbtnB)
-                                .addGap(63, 63, 63)
-                                .addComponent(rbtnC)
-                                .addGap(67, 67, 67)
-                                .addComponent(rbtnD))
+                                .addComponent(btnXoaCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jlabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnTimKiem)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnXoaCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                .addComponent(cboxCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67)
+                                .addComponent(btnTimKiemCauHoi)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlabel)
-                    .addComponent(txtCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem))
-                .addGap(11, 11, 11)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlabel)
+                            .addComponent(btnTimKiemCauHoi))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cboxCauHoiSo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,7 +391,7 @@ public class formXoaCauHoi extends javax.swing.JFrame {
                             .addComponent(rbtnC)
                             .addComponent(rbtnD)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear)
                     .addComponent(btnXoaCauHoi))
@@ -283,122 +401,109 @@ public class formXoaCauHoi extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void timKiemCauHoiSo(int cauHoiSo) {
-        String query = "SELECT * FROM CauHoi WHERE CauHoiSo = ?";
-        Connection con = new DBConnection().getConnection();
-        
-        try {
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, cauHoiSo);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()) {
-                DeThi deThi = new DeThi();
-                cauHoi = new CauHoi(
-                        deThi, 
-                        rs.getInt("CauHoiSo"),
-                        rs.getString("NoiDung"), 
-                        rs.getString("A"), 
-                        rs.getString("B"), 
-                        rs.getString("C"), 
-                        rs.getString("D"), 
-                        rs.getString("DapAn")
-                );
-                
-                loadCauHoi();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi với số: " + cauHoiSo, "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void loadCauHoi() {
-        txtNoiDung.setText(cauHoi.getNoiDung());
-        txtA.setText(cauHoi.getA());
-        txtB.setText(cauHoi.getB());
-        txtC.setText(cauHoi.getC());
-        txtD.setText(cauHoi.getD());
-        
-        switch(cauHoi.getDapAn()) {
-            case "A":
-                rbtnA.setSelected(true);
-                break;
-            case "B":
-                rbtnB.setSelected(true);
-                break;
-            case "C":
-                rbtnC.setSelected(true);
-                break;
-            case "D":
-                rbtnD.setSelected(true);
-                break;
-        }
-    }
     
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        txtCauHoiSo.setText("");
         txtNoiDung.setText("");
         txtA.setText("");
         txtB.setText("");
         txtC.setText("");
         txtD.setText("");
+        
         groupChonDapAn.clearSelection();
-        txtCauHoiSo.setEditable(true);
+        
+        cboxMonThi.setSelectedIndex(-1);
+        cboxMaDeThi.setSelectedItem(-1);
+        cboxCauHoiSo.setSelectedIndex(-1);
     }//GEN-LAST:event_btnClearActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemCauHoiActionPerformed
         // TODO add your handling code here:
-        int cauHoiSo = Integer.parseInt(txtCauHoiSo.getText());
-        timKiemCauHoiSo(cauHoiSo);
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+        int cauHoiSo = Integer.parseInt((String) cboxCauHoiSo.getSelectedItem());
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
+        int deThiID = delete.getDeThiID(maDeThi);
+        
+        if(deThiID != -1 && cauHoiSo > 0) {
+            CauHoi cauHoi = delete.loadDanhSachCauHoi(cauHoiSo, deThiID);
+            
+            if(cauHoi != null) {
+                txtNoiDung.setText(cauHoi.getNoiDung());
+                txtA.setText(cauHoi.getA());
+                txtB.setText(cauHoi.getB());
+                txtC.setText(cauHoi.getC());
+                txtD.setText(cauHoi.getD());
+                
+                String dapAn = cauHoi.getDapAn();
+                
+                rbtnA.setSelected("A".equals(dapAn));
+                rbtnB.setSelected("B".equals(dapAn));
+                rbtnC.setSelected("C".equals(dapAn));
+                rbtnD.setSelected("D".equals(dapAn));
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi và câu hỏi số hợp lệ", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTimKiemCauHoiActionPerformed
 
     private void btnXoaCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaCauHoiActionPerformed
         // TODO add your handling code here:
-        if(cauHoi == null || cauHoi.getCauHoiSo() == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng tìm kiếm câu hỏi trước khi xóa", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
+        int cauHoiSo = Integer.parseInt((String) cboxCauHoiSo.getSelectedItem());
+        int deThiID = delete.getDeThiID(maDeThi);
+        boolean isDeleted = delete.deleteCauHoi(cauHoiSo, deThiID);
         
-        int xacNhan = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa câu hỏi này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-        
-        if(xacNhan != JOptionPane.YES_NO_OPTION) {
-            return;
-        } 
-        
-        String deleteCauHoi = "DELETE FROM CauHoi WHERE CauHoiSo = ?";
-        Connection con = new DBConnection().getConnection();
-        
-        try {
-            PreparedStatement ps = con.prepareStatement(deleteCauHoi);
-            ps.setInt(1, cauHoi.getCauHoiSo());
-            
-            int rowsAffected = ps.executeUpdate();
-            
-            if(rowsAffected > 0) {
-                JOptionPane.showMessageDialog(this, "Xóa câu hỏi đã thành công");
-                this.dispose();
-                new formQuanLyDeThi().setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi khi xóa.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        if(isDeleted) {
+            JOptionPane.showMessageDialog(this, "Xóa câu hỏi đã thành công!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Xóa câu hỏi đã Thất bại", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnXoaCauHoiActionPerformed
+
+    private void btnQuanLyDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDeThiActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new formQuanLyDeThi().setVisible(true);
+    }//GEN-LAST:event_btnQuanLyDeThiActionPerformed
+
+    private void btnTimKiemDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemDeThiActionPerformed
+        // TODO add your handling code here:
+        String monThi = (String) cboxMonThi.getSelectedItem();
+        
+        if(monThi != null) {
+            List<String> dsMaDeThi = delete.loadMaDeThi(monThi);
+            cboxMaDeThi.removeAllItems();
+            
+            for(String maDeThi : dsMaDeThi) {
+                cboxMaDeThi.addItem(maDeThi);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn môn thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTimKiemDeThiActionPerformed
+
+    private void cboxMaDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxMaDeThiActionPerformed
+        // TODO add your handling code here:
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
+        
+        if(maDeThi != null) {
+            int deThiID = delete.getDeThiID(maDeThi);
+            
+            if(deThiID != -1) {
+                List<Integer> dsCauHoiSo = delete.loadCauHoiSo(deThiID);
+                cboxCauHoiSo.removeAllItems();
+                
+                for(Integer cauHoiSo : dsCauHoiSo) {
+                    cboxCauHoiSo.addItem(String.valueOf(cauHoiSo));
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy mã đề thi!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_cboxMaDeThiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -437,9 +542,16 @@ public class formXoaCauHoi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnTimKiem;
+    private javax.swing.JButton btnQuanLyDeThi;
+    private javax.swing.JButton btnTimKiemCauHoi;
+    private javax.swing.JButton btnTimKiemDeThi;
     private javax.swing.JButton btnXoaCauHoi;
+    private javax.swing.JComboBox<String> cboxCauHoiSo;
+    private javax.swing.JComboBox<String> cboxMaDeThi;
+    private javax.swing.JComboBox<String> cboxMonThi;
     private javax.swing.ButtonGroup groupChonDapAn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -449,6 +561,7 @@ public class formXoaCauHoi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jlabel;
     private javax.swing.JRadioButton rbtnA;
@@ -458,7 +571,6 @@ public class formXoaCauHoi extends javax.swing.JFrame {
     private javax.swing.JTextField txtA;
     private javax.swing.JTextField txtB;
     private javax.swing.JTextField txtC;
-    private javax.swing.JTextField txtCauHoiSo;
     private javax.swing.JTextField txtD;
     private javax.swing.JTextArea txtNoiDung;
     // End of variables declaration//GEN-END:variables

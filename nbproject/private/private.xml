@@ -5,8 +5,11 @@
         <group>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formTaoBoCauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/CauHoi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formCapNhatCauHoi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DeleteCauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DeThi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formQuanLyDeThi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formXoaCauHoi.java</file>
         </group>
     </open-files>
 </project-private>

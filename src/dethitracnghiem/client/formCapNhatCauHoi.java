@@ -7,6 +7,7 @@ package dethitracnghiem.client;
 import dethitracnghiem.server.CauHoi;
 import dethitracnghiem.server.DBConnection;
 import dethitracnghiem.server.DeThi;
+import dethitracnghiem.server.UpdateCauHoi;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,14 @@ import javax.swing.JOptionPane;
  * @author USER
  */
 public class formCapNhatCauHoi extends javax.swing.JFrame {
+    private UpdateCauHoi update;
     /**
      * Creates new form formCapNhatCauHoi
      */
     public formCapNhatCauHoi() {
         initComponents();
+        update = new UpdateCauHoi(new DBConnection().getConnection());
         loadMonThi();
-        
-        
     }
 
     private void loadMonThi() {
@@ -40,150 +41,6 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Lỗi tải danh sách môn thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void loadMaDeThi(String monThi) {
-        cboxMaDeThi.removeAllItems();
-        Connection conn = new DBConnection().getConnection();
-        String listMaDeThi = "SELECT MaDeThi FROM DeThi WHERE MonThi = ?";
-        
-        try {
-            PreparedStatement ps = conn.prepareStatement(listMaDeThi);
-            ps.setString(1, monThi);
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()) {
-                cboxMaDeThi.addItem(rs.getString("MaDeThi"));
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách mã đề thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private int getDeThiID(String maDeThi) {
-        int deThiID = -1;
-        Connection conn = new DBConnection().getConnection();
-        String query = "SELECT ID FROM DeThi WHERE MaDeThi = ?";
-        
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, maDeThi);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()) {
-                deThiID = rs.getInt("ID");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi lấy DeThiID: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        return deThiID;
-    }
-    
-    private void loadCauHoiSo(int deThiID) {
-        cboxCauHoiSo.removeAllItems();
-        Connection conn = new DBConnection().getConnection();
-        
-        try {
-            String numberQuestion = "SELECT CauhoiSo FROM CauHoi WHERE DeThiID = ?";
-            PreparedStatement ps = conn.prepareStatement(numberQuestion);
-            ps.setInt(1, deThiID);
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()) {
-                cboxCauHoiSo.addItem(String.valueOf(rs.getInt("CauHoiSo")));
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void loadCauHoiDetails(int cauHoiSo, int deThiID) {
-        Connection conn = new DBConnection().getConnection();
-        String detailsQuestion = "SELECT * FROM CauHoi WHERE CauHoiSo = ? AND DeThiID = ?";
-        
-        try {
-            PreparedStatement ps = conn.prepareStatement(detailsQuestion);
-            
-            ps.setInt(1, cauHoiSo);
-            ps.setInt(2, deThiID);
-            
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()) {
-                txtNoiDung.setText(rs.getString("NoiDung"));
-                txtA.setText(rs.getString("A"));
-                txtB.setText(rs.getString("B"));
-                txtC.setText(rs.getString("C"));
-                txtD.setText(rs.getString("D"));
-                
-                String dapAn = rs.getString("DapAn");
-                
-                switch(dapAn) {
-                    case "A":
-                        rbtnA.setSelected(true);
-                        break;
-                    case "B":
-                        rbtnB.setSelected(true);
-                        break;
-                    case "C":
-                        rbtnC.setSelected(true);
-                        break;
-                    case "D":
-                        rbtnD.setSelected(true);
-                        break;
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi tải thông tin câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void updateCauHoi(int cauHoiSo, int deThiID) {
-        String noiDung = txtNoiDung.getText();
-        String A = txtA.getText();
-        String B = txtB.getText();
-        String C = txtC.getText();
-        String D = txtD.getText();
-        
-        if(noiDung.isEmpty() || A.isEmpty() || B.isEmpty() || C.isEmpty() || D.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ nội dung và 4 đáp án", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        String dapAn = rbtnA.isSelected() ? "A" : rbtnB.isSelected() ? "B" : rbtnC.isSelected() ? "C" : "D";
-        
-        if(dapAn == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn đáp án đúng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        Connection conn = new DBConnection().getConnection();
-        String update = "UPDATE CauHoi SET NoiDung = ?, A = ?, B = ?, C = ?, D = ?, DapAn = ? \n"
-                        + "WHERE CauHoiSo = ? AND DeThiID = ?";
-        
-        try {
-            PreparedStatement ps = conn.prepareStatement(update);
-            
-            ps.setString(1, noiDung);
-            ps.setString(2, A);
-            ps.setString(3, B);
-            ps.setString(4, C);
-            ps.setString(5, D);
-            ps.setString(6, dapAn);
-            ps.setInt(7, cauHoiSo);
-            ps.setInt(8, deThiID);
-            
-            int rows = ps.executeUpdate();
-            
-            if(rows > 0) {
-                JOptionPane.showMessageDialog(this, "Cập nhật câu hỏi đã Thành công");
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi để cập nhật", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi cập nhật câu hỏi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -250,10 +107,11 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("CẬP NHẬT ĐỀ THI");
 
-        btnQuanLyDeThi.setBackground(new java.awt.Color(102, 0, 102));
+        btnQuanLyDeThi.setBackground(new java.awt.Color(255, 255, 0));
         btnQuanLyDeThi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnQuanLyDeThi.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyDeThi.setForeground(new java.awt.Color(0, 0, 0));
         btnQuanLyDeThi.setText("Quản lý đề thi");
+        btnQuanLyDeThi.setBorder(null);
         btnQuanLyDeThi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuanLyDeThiActionPerformed(evt);
@@ -423,7 +281,7 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addGap(18, 18, 18)
                 .addComponent(cboxMaDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboxMonThi, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -566,58 +424,65 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
     
     private void btnTimKiemCauHoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemCauHoiActionPerformed
         // TODO add your handling code here:
-        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
+        int cauHoiSo = Integer.parseInt((String) cboxCauHoiSo.getSelectedItem());
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
+        int deThiID = update.getDeThiID(maDeThi);
         
-        if(selectedMaDeThi == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
+        if(deThiID != -1 && cauHoiSo > 0) {
+            CauHoi cauHoi = update.loadDanhSachCauHoi(cauHoiSo, deThiID);
+            
+            if(cauHoi != null) {
+                txtNoiDung.setText(cauHoi.getNoiDung());
+                txtA.setText(cauHoi.getA());
+                txtB.setText(cauHoi.getB());
+                txtC.setText(cauHoi.getC());
+                txtD.setText(cauHoi.getD());
+                
+                String dapAn = cauHoi.getDapAn();
+                
+                rbtnA.setSelected("A".equals(dapAn));
+                rbtnB.setSelected("B".equals(dapAn));
+                rbtnC.setSelected("C".equals(dapAn));
+                rbtnD.setSelected("D".equals(dapAn));
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy câu hỏi", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi và câu hỏi số hợp lệ", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }
-        
-        int deThiID = getDeThiID(selectedMaDeThi);
-        
-        if(deThiID == -1) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy DeThiID!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        String selectedCauHoiSo = (String) cboxCauHoiSo.getSelectedItem();
-        
-        if(selectedCauHoiSo == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn câu hỏi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        int cauHoiSo = Integer.parseInt(selectedCauHoiSo);
-        
-        loadCauHoiDetails(cauHoiSo, deThiID);
     }//GEN-LAST:event_btnTimKiemCauHoiActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here
-        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
+        int cauHoiSo = Integer.parseInt((String) cboxCauHoiSo.getSelectedItem());
+        int deThiID = update.getDeThiID(maDeThi);
+        String noiDung = txtNoiDung.getText();
+        String A = txtA.getText();
+        String B = txtB.getText();
+        String C = txtC.getText();
+        String D = txtD.getText();
+        String dapAn = "";
         
-        if(selectedMaDeThi == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
+        if(rbtnA.isSelected()) {
+            dapAn = "A";
+        } else if(rbtnA.isSelected()) {
+            dapAn = "B";
+        } else if(rbtnB.isSelected()) {
+            dapAn = "B";
+        } else if(rbtnC.isSelected()) {
+            dapAn = "C";
+        } else if(rbtnD.isSelected()) {
+            dapAn = "D";
         }
         
-        int deThiID = getDeThiID(selectedMaDeThi);
+        boolean isUpdate = update.updateCauHoi(cauHoiSo, deThiID, noiDung, A, B, C, D, dapAn);
         
-        if(deThiID == -1) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy DeThiID!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
+        if(isUpdate) {
+            JOptionPane.showMessageDialog(this, "Cập nhật câu hỏi đã thành công!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật câu hỏi đã Thất bại", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }
-        
-        String selectedCauHoiSo = (String) cboxCauHoiSo.getSelectedItem();
-        
-        if(selectedCauHoiSo == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn câu hỏi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        int cauHoiSo = Integer.parseInt(selectedCauHoiSo);
-        
-        updateCauHoi(cauHoiSo, deThiID);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -640,7 +505,14 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
         String monThi = (String) cboxMonThi.getSelectedItem();
         
         if(monThi != null) {
-            loadMaDeThi(monThi);
+            List<String> dsMaDeThi = update.loadMaDeThi(monThi);
+            cboxMaDeThi.removeAllItems();
+            
+            for(String maDeThi : dsMaDeThi) {
+                cboxMaDeThi.addItem(maDeThi);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn môn thi!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnTimKiemDeThiActionPerformed
 
@@ -651,14 +523,23 @@ public class formCapNhatCauHoi extends javax.swing.JFrame {
 
     private void cboxMaDeThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxMaDeThiActionPerformed
         // TODO add your handling code here:
-        String selectedMaDeThi = (String) cboxMaDeThi.getSelectedItem();
+        String maDeThi = (String) cboxMaDeThi.getSelectedItem();
         
-        if(selectedMaDeThi != null) {
-            int deThiID = getDeThiID(selectedMaDeThi);
+        if(maDeThi != null) {
+            int deThiID = update.getDeThiID(maDeThi);
             
             if(deThiID != -1) {
-                loadCauHoiSo(deThiID);;
+                List<Integer> dsCauHoiSo = update.loadCauHoiSo(deThiID);
+                cboxCauHoiSo.removeAllItems();
+                
+                for(Integer cauHoiSo : dsCauHoiSo) {
+                    cboxCauHoiSo.addItem(String.valueOf(cauHoiSo));
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy mã đề thi!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đề thi!", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_cboxMaDeThiActionPerformed
 

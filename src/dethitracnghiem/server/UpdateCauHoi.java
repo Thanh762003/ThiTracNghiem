@@ -10,13 +10,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author USER
  */
 public class UpdateCauHoi {
-    Connection con = new DBConnection().getConnection();
+    private Connection con = new DBConnection().getConnection();
+
+    public UpdateCauHoi() {
+    }
+    
+    public UpdateCauHoi(Connection con) {
+        this.con = con;
+    }
     
     public List<DeThi> loadDeThi() {
         List<DeThi> dsDeThi = new ArrayList<>();
@@ -132,5 +140,32 @@ public class UpdateCauHoi {
         }
         
         return cauHoi;
+    }
+    
+    public boolean updateCauHoi(int cauHoiSo, int deThiID, String noiDung, String A, String B, String C, String D, String dapAn) {
+        String update = "UPDATE CauHoi SET NoiDung = ?, A = ?, B = ?, C = ?, D = ?, DapAn = ?\n"
+                    + "WHERE CauHoiSo = ? AND DeThiID = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(update);
+            
+            ps.setString(1, noiDung);
+            ps.setString(2, A);
+            ps.setString(3, B);
+            ps.setString(4, C);
+            ps.setString(5, D);
+            ps.setString(6, dapAn);
+            ps.setInt(7, cauHoiSo);
+            ps.setInt(8, deThiID);
+            
+            int rowsAffected = ps.executeUpdate();
+            
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật câu hỏi: " + e.getMessage(), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            
+            return false;
+        } 
     }
 }
