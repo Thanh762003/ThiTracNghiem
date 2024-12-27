@@ -77,6 +77,7 @@ public class formRegistration extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableUsers = new javax.swing.JTable();
+        btnUpdateUsers = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -287,15 +288,33 @@ public class formRegistration extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tableUsers);
 
+        btnUpdateUsers.setBackground(new java.awt.Color(153, 153, 153));
+        btnUpdateUsers.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnUpdateUsers.setForeground(new java.awt.Color(0, 0, 0));
+        btnUpdateUsers.setText("Cập nhật tài khoản");
+        btnUpdateUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateUsersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(301, 301, 301)
+                .addComponent(btnUpdateUsers)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(btnUpdateUsers)
+                .addGap(36, 36, 36))
         );
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 204));
@@ -424,6 +443,20 @@ public class formRegistration extends javax.swing.JFrame {
         new formLogin().setVisible(true);
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
+    private void btnUpdateUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateUsersActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tableUsers.getSelectedRow();
+        
+        if(selectedRow != -1) {
+            String maUsers = tableUsers.getValueAt(selectedRow, 0).toString();
+            String hoTen = tableUsers.getValueAt(selectedRow, 1).toString();
+            String soDienThoai = tableUsers.getValueAt(selectedRow, 2).toString();
+            String email = tableUsers.getValueAt(selectedRow, 3).toString();
+            Character gioiTinh = tableUsers.getValueAt(selectedRow, 4).toString().charAt(0);
+        }
+        new formUpdateUsers().setVisible(true);
+    }//GEN-LAST:event_btnUpdateUsersActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -463,6 +496,7 @@ public class formRegistration extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangKy;
     private javax.swing.JButton btnDangNhap;
+    private javax.swing.JButton btnUpdateUsers;
     private javax.swing.ButtonGroup gruopGioiTinh;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
