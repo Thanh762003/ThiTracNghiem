@@ -26,4 +26,26 @@ public class DBConnection {
             return null;
         }
     }
+    
+    public static boolean getConnect(String str) {
+        boolean check = false;
+        Connection conn = null;
+        String[] arrStr = str.split("///");
+        System.out.println("\nServername: " + arrStr[1] + "\nUsername: " + arrStr[2] + "\nPassword: " + arrStr[3]);
+        String ServerName = arrStr[1];
+        String name = arrStr[2];
+        String pass = arrStr[3];
+        String url = "jdbc:sqlserver://" + ServerName + ";databaseName=ThiTracNghiem;user=" + name + ";password=" + pass;
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            conn = DriverManager.getConnection(url, name, pass);
+            if (conn != null) {
+                System.out.println("Successful connection to database!!");
+                check = true;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
 }

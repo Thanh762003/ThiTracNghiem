@@ -29,14 +29,18 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
         initComponents();
         modelDeThi = (DefaultTableModel) tableDeThi.getModel();
         modelCauHoi = (DefaultTableModel) tableCauHoi.getModel();
-        loadDSDeThi();
-//        loadDSCauHoi();
-
+        loadDeThi();
+        
         tableDeThi.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if(!e.getValueIsAdjusting()) {
-                    loadDSCauHoi();
+                    int selectedRow = tableDeThi.getSelectedRow();
+                    
+                    if(selectedRow != -1) {
+                        int deThiID = (int) modelDeThi.getValueAt(selectedRow, 0);
+                        loadCauHoi(deThiID);
+                    }
                 }
             }
         });
@@ -127,7 +131,7 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnTaoDeThi, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
                 .addComponent(btnCapNhatCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(237, 237, 237)
                 .addComponent(btnXoaCauHoi, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,7 +181,7 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Câu hỏi số", "Nội dung", "A", "B", "C", "D", "DapAn"
+                "ID", "Câu hỏi số", "Nội dung", "A", "B", "C", "D", "DapAn", "DeThiID"
             }
         ));
         jScrollPane2.setViewportView(tableCauHoi);
@@ -188,18 +192,16 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(207, 207, 207))))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(264, 264, 264))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +214,7 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -230,8 +232,7 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -256,7 +257,7 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
         new formXoaCauHoi().setVisible(true);
     }//GEN-LAST:event_btnXoaCauHoiActionPerformed
 
-    private void loadDSDeThi() {
+    private void loadDeThi() {
         DeThi deThi = new DeThi();
         List<DeThi> dsDeThi = deThi.getDSDeThi();
         modelDeThi.setRowCount(0);
@@ -270,27 +271,23 @@ public class formQuanLyDeThi extends javax.swing.JFrame {
         }
     }
     
-    private void loadDSCauHoi() {
-        int selectedRow = tableDeThi.getSelectedRow();
+    private void loadCauHoi(int deThiID) {
+        CauHoi cauHoi = new CauHoi();
+        List<CauHoi> dsCauHoi = cauHoi.getDSCauHoiByDeThi(deThiID);
+        modelCauHoi.setRowCount(0);
         
-        if(selectedRow != -1) {
-            int deThiID = (int) modelDeThi.getValueAt(selectedRow, 0);
-            CauHoi cauHoi = new CauHoi();
-            List<CauHoi> dsCauHoi = cauHoi.getDSCauHoiByDeThi(deThiID);
-            modelCauHoi.setRowCount(0);
-            
-            for(CauHoi ch : dsCauHoi) {
-                modelCauHoi.addRow(new Object[]{
-                    ch.getCauHoiSo(),
-                    ch.getNoiDung(),
-                    ch.getA(),
-                    ch.getB(),
-                    ch.getC(),
-                    ch.getD(),
-                    ch.getDapAn(),
-                    ch.getDeThi().getDeThiID()
-                });
-            }
+        for(CauHoi ch : dsCauHoi) {
+            modelCauHoi.addRow(new Object[]{
+                ch.getQuestionID(),
+                ch.getCauHoiSo(),
+                ch.getNoiDung(),
+                ch.getA(),
+                ch.getB(),
+                ch.getC(),
+                ch.getD(),
+                ch.getDapAn(),
+                ch.getDeThi().getDeThiID()
+            });
         }
     }
     

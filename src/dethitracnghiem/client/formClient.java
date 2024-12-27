@@ -229,7 +229,7 @@ public class formClient extends javax.swing.JFrame {
                 socket.close();
 
                 this.setVisible(false);
-                new formRegistration().setVisible(true);
+                new formLogin().setVisible(true);
                 check = true;
             }
         } catch (IOException e) {

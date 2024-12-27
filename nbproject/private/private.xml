@@ -4,12 +4,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formTaoBoCauHoi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formRegistration.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/Users.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/Server.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formLogin.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/AdminEmailPassword.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formClient.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/CauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formCapNhatCauHoi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DeleteCauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DeThi.java</file>
-            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formQuanLyDeThi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/UpdateCauHoi.java</file>
             <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/client/formXoaCauHoi.java</file>
+            <file>file:/D:/Users/SIU/Java%20Internet/Final%20Project/DeThiTracNghiem/src/dethitracnghiem/server/DBConnection.java</file>
         </group>
     </open-files>
 </project-private>

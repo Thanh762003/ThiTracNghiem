@@ -44,6 +44,7 @@ public class formLogin extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         btnDangNhap = new javax.swing.JButton();
+        btnDangKy = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -70,7 +71,7 @@ public class formLogin extends javax.swing.JFrame {
         txtPasswordAdmin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
 
         btnLoginAdmin.setBackground(new java.awt.Color(0, 255, 255));
-        btnLoginAdmin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnLoginAdmin.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnLoginAdmin.setForeground(new java.awt.Color(0, 0, 0));
         btnLoginAdmin.setText("ĐĂNG NHẬP");
         btnLoginAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -135,12 +136,22 @@ public class formLogin extends javax.swing.JFrame {
         jLabel1.setText("Đăng nhập tài khoản");
 
         btnDangNhap.setBackground(new java.awt.Color(0, 255, 255));
-        btnDangNhap.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnDangNhap.setForeground(new java.awt.Color(0, 0, 0));
         btnDangNhap.setText("ĐĂNG NHẬP");
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDangNhapActionPerformed(evt);
+            }
+        });
+
+        btnDangKy.setBackground(new java.awt.Color(255, 153, 153));
+        btnDangKy.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnDangKy.setForeground(new java.awt.Color(0, 0, 0));
+        btnDangKy.setText("ĐĂNG KÝ");
+        btnDangKy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDangKyActionPerformed(evt);
             }
         });
 
@@ -152,7 +163,10 @@ public class formLogin extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDangKy, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
@@ -174,8 +188,10 @@ public class formLogin extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDangKy, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(69, 69, 69))
         );
 
@@ -285,6 +301,12 @@ public class formLogin extends javax.swing.JFrame {
         System.out.println(email + " ---> " + password);
     }//GEN-LAST:event_btnLoginAdminActionPerformed
 
+    private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new formRegistration().setVisible(true);
+    }//GEN-LAST:event_btnDangKyActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -321,6 +343,7 @@ public class formLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDangKy;
     private javax.swing.JButton btnDangNhap;
     private javax.swing.JButton btnLoginAdmin;
     private javax.swing.JLabel jLabel1;
